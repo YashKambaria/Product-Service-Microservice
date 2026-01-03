@@ -13,14 +13,21 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/orders")
 public class OrderController {
 	
-	@Autowired
-	public RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
+	
+	public OrderController(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getOrder(@PathVariable String id){
-		String response=restTemplate.getForObject("http://localhost:8082/products/"+id,String.class);
-		System.out.println("Response from api "+response);
-		return ResponseEntity.ok(response);
+		String uri="http://localhost:8082/products/"+id;
+		String response=restTemplate.getForObject(uri,String.class);
+		ResponseEntity<String> response1=restTemplate.getForEntity(uri,String.class);
+		
+		System.out.println("Response from api "+response1.getStatusCode());
+		return ResponseEntity.ok(response1.getBody());
 	}
 	
 	
