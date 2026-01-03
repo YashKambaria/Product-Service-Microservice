@@ -7,27 +7,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 	
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
 	
-	public OrderController(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
+	public OrderController(RestClient restClient) {
+		this.restClient = restClient;
 	}
 	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getOrder(@PathVariable String id){
 		String uri="http://localhost:8082/products/"+id;
-		String response=restTemplate.getForObject(uri,String.class);
-		ResponseEntity<String> response1=restTemplate.getForEntity(uri,String.class);
 		
-		System.out.println("Response from api "+response1.getStatusCode());
-		return ResponseEntity.ok(response1.getBody());
+		String body = restClient.get()
+				.uri(uri)
+				.retrieve()
+				.body(String.class);
+		
+		return ResponseEntity.ok(body);
 	}
 	
 	
