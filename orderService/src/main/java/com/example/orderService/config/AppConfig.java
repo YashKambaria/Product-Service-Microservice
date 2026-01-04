@@ -14,7 +14,7 @@ public class AppConfig {
 		
 		return RestClient
 				.builder()
-				.requestInterceptor(myCustomInterceptor)
+				.baseUrl("http://localhost:8082/products")
 				.build();
 				
 	}
