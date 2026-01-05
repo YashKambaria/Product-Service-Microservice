@@ -92,6 +92,29 @@ public class OrderController {
 		}
 	}
 	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<?> updateOrderById(
+			@PathVariable String id,
+			@RequestBody Product product
+	)
+	{
+		String uri="/update/"+id;
+		
+		ResponseEntity<String> response=restClient.put()
+				.uri(uri)
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(product)
+				.retrieve()
+				.toEntity(String.class);
+		
+		if(response.getStatusCode().is2xxSuccessful()){
+			return ResponseEntity.ok(response.getBody());
+		}
+		else{
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
 	
 	
 	
