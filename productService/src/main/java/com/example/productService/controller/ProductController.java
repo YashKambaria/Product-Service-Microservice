@@ -47,7 +47,7 @@ public class ProductController {
 		}
 	}
 	
-	@PutMapping("/update/{id}")
+	@PatchMapping("/update/{id}")
 	public ResponseEntity<String> updateProduct(
 			@PathVariable String id,
 			@RequestBody Product product
@@ -59,12 +59,25 @@ public class ProductController {
 		if(product.getProductCount()>=0 && product.getProductCount()!=old.getProductCount()){
 			old.setProductCount(product.getProductCount());
 		}
-		if(!product.getName().trim().isBlank() && !product.getName().isEmpty()
+		if(product.getName()!=null && !product.getName().isEmpty() && !product.getName().trim().isBlank()
 		&& !product.getName().equals(old.getName())){
 			old.setName(product.getName());
 		}
 		
 		return ResponseEntity.ok("Product updated succesfully");
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deleteProduct(
+			@PathVariable String id
+	){
+		if(data.containsKey(id)) {
+			data.remove(id);
+		   return ResponseEntity.noContent().build();
+		}
+		else{
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	

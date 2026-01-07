@@ -82,7 +82,7 @@ public class OrderController {
 				.toEntity(Integer.class);
 		
 		if(body.getStatusCode().is2xxSuccessful()){
-			int totalPrice=orderRequest.getQuantity()*body.getBody();
+			int totalPrice=orderRequest.getQuantity()*body.getBody().intValue();
 			String description="Thanks for placing the order the bill is of "+totalPrice;
 			
 			return ResponseEntity.ok(description);
@@ -92,7 +92,7 @@ public class OrderController {
 		}
 	}
 	
-	@PutMapping("/update/{id}")
+	@PatchMapping("/update/{id}")
 	public ResponseEntity<?> updateOrderById(
 			@PathVariable String id,
 			@RequestBody Product product
@@ -100,7 +100,7 @@ public class OrderController {
 	{
 		String uri="/update/"+id;
 		
-		ResponseEntity<String> response=restClient.put()
+		ResponseEntity<String> response=restClient.patch()
 				.uri(uri)
 				.contentType(MediaType.APPLICATION_JSON)
 				.body(product)
@@ -114,6 +114,33 @@ public class OrderController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deleteOrderById(
+			@PathVariable String id
+	){
+		String uri="/delete/"+id;
+		
+		ResponseEntity<?> response = restClient.delete()
+				.uri(uri)
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()
+				.toBodilessEntity();
+		
+		if(response.getStatusCode().is2xxSuccessful()){
+			return ResponseEntity.ok("Product Deleted succesfully");
+		}
+		else{
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
