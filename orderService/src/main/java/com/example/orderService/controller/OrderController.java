@@ -3,8 +3,10 @@ package com.example.orderService.controller;
 
 import com.example.orderService.entity.OrderRequest;
 import com.example.orderService.entity.Product;
+import com.example.orderService.entity.Sample;
 import com.example.orderService.proxy.ProductClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ public class OrderController {
 	@Autowired
 	public ProductClient productClient;
 	
+	@Autowired
+	private Environment environment;
+	
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getOrder(@PathVariable String id){
@@ -37,10 +42,10 @@ public class OrderController {
 		return ResponseEntity.ok(body);
 	}
 	
-	@GetMapping("/feign/{id}")
-	public ResponseEntity<String> getOrder2(@PathVariable String id){
-		String productById = productClient.getProductById(id);
-		return ResponseEntity.ok(productById);
+	@PostMapping("/feign")
+	public ResponseEntity<?> getOrder2(@RequestBody Sample test){
+		String productById = productClient.getProductById(test.getId());
+		return ResponseEntity.ok(new Sample(productById,test.getId()));
 	}
 	
 	@PostMapping

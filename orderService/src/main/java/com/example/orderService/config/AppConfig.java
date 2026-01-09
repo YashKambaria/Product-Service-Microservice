@@ -9,7 +9,7 @@ import org.springframework.web.client.RestClient;
 public class AppConfig {
 	
 	@Bean
-	public RestClient restClient(ClientHttpRequestInterceptor myCustomInterceptor){
+	public RestClient restClient(){
 		//in this we configure the restclient and set the interceptor
 		
 		return RestClient
@@ -19,9 +19,4 @@ public class AppConfig {
 				
 	}
 	
-	@Bean
-	public ClientHttpRequestInterceptor customRequestInterceptor(){
-		//here we return the custom class we made for interceptor
-		return new MyCustomRequestInterceptor();
-	}
 }

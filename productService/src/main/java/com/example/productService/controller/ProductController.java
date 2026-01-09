@@ -2,6 +2,8 @@ package com.example.productService.controller;
 
 
 import com.example.productService.entity.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +16,13 @@ public class ProductController {
 	
 	HashMap<String, Product> data=new HashMap<>();
 	
+	@Autowired
+	private Environment environment;
 	
 	@GetMapping("/{id}")
 	public String getProduct(@PathVariable String id){
-		return "Product fetched with id "+id;
+		String port=environment.getProperty("local.server.port");
+		return port;
 	}
 	
 	@PostMapping
