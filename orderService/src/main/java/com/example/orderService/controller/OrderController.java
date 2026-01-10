@@ -6,12 +6,14 @@ import com.example.orderService.entity.Product;
 import com.example.orderService.entity.Sample;
 import com.example.orderService.proxy.ProductClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/orders")
@@ -24,7 +26,13 @@ public class OrderController {
 	}
 	
 	@Autowired
+	public RestTemplate restTemplate;
+	
+	@Autowired
 	public ProductClient productClient;
+	
+	@Value("${product.baseUrl}")
+	public String baseUrl;
 	
 	@Autowired
 	private Environment environment;
@@ -32,14 +40,9 @@ public class OrderController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getOrder(@PathVariable String id){
-		String uri=id;
+		String response = restTemplate.getForObject(baseUrl+"/products/"+id,String.class);
 		
-		String body = restClient.get()
-				.uri(uri)
-				.retrieve()
-				.body(String.class);
-		
-		return ResponseEntity.ok(body);
+		return ResponseEntity.ok(response);
 	}
 	
 	@PostMapping("/feign")
