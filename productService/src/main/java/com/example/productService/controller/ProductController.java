@@ -2,6 +2,7 @@ package com.example.productService.controller;
 
 
 import com.example.productService.entity.Product;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -20,9 +21,14 @@ public class ProductController {
 	private Environment environment;
 	
 	@GetMapping("/{id}")
+	@RateLimiter(name = "productRateLimiter",fallbackMethod = "fallbackget")
 	public String getProduct(@PathVariable String id){
 		String port=environment.getProperty("local.server.port");
 		return port;
+	}
+	
+	public String fallbackget(String id,Throwable t){
+		return "Limit exceded";
 	}
 	
 	@PostMapping
