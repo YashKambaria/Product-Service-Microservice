@@ -1,4 +1,4 @@
-package com.example.orderService.config;
+package com.example.loadbalancer.config;
 
 
 import org.springframework.cloud.client.ServiceInstance;
